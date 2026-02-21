@@ -8,10 +8,8 @@ export abstract class Operator extends Node {
     this.minInputs = minInputs
   }
 
-  push() {
+  pull() {
     if (this.hasPushedThisTick) return null
-    const valueToPush = this.value
-    this.hasPushedThisTick = true
 
     if (this.connections.filter(c => c.type === 'input').length < this.minInputs) return null
     const inputValues = this.connections.filter(c => c.type === 'input').map(c => {
@@ -19,7 +17,7 @@ export abstract class Operator extends Node {
     })
     if (inputValues.filter(v => v !== null).length < this.minInputs) return null
     this.value = this.calculate(inputValues)
-    return valueToPush
+    return this.value
   }
 
   abstract calculate(inputValues: (number | null)[]): number | null
