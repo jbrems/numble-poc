@@ -1,7 +1,5 @@
 import type { Connection } from "../types"
 import { Node } from "./Node"
-import { Operator } from "./operators/Operator"
-import { Source } from "./Source"
 
 export class Belt extends Node {
   public progress: number

@@ -81,8 +81,8 @@ export class GameStateService {
     }
   }
 
-  setSelectedCell(column: number, row: number): void {
-    if (column === null) this.selectedCell = null
+  setSelectedCell(column: number | null, row: number | null): void {
+    if (column === null || row === null) this.selectedCell = null
     else this.selectedCell = { column, row }
     this.notifySubscribers('selectedCell')
   }

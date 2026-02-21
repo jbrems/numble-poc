@@ -18,9 +18,9 @@ export abstract class Node {
 
   public abstract draw(ctx: CanvasRenderingContext2D, gridSize: number): void
 
-  public drawValue(ctx: CanvasRenderingContext2D, gridSize: number): void { }
+  public drawValue(_ctx: CanvasRenderingContext2D, _gridSize: number): void { }
 
-  public animate(delta: number) { }
+  public animate(_delta: number) { }
 
   public tick() {
     this.hasPushedThisTick = false
