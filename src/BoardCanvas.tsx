@@ -24,6 +24,11 @@ export function BoardCanvas({ gameStateService }: BoardCanvasProps) {
     const cols = Math.round(canvas.width / state.gridSize)
     const rows = Math.floor(canvas.height / state.gridSize)
 
+    gameStateService.setBoardOffset(
+      Math.floor((cols - 10) / 2),
+      Math.floor((rows - 11) / 2),
+    )
+
     ctx.strokeStyle = '#444444'
     ctx.lineWidth = 1
 
@@ -46,14 +51,14 @@ export function BoardCanvas({ gameStateService }: BoardCanvasProps) {
     }
 
     // Nodes
-    state.nodes.forEach((node) => node.draw(ctx, state.gridSize))
+    state.nodes.forEach((node) => node.drawNode(ctx, state.gridSize, state.boardOffset))
 
     // Selected cell
     ctx.strokeStyle = 'gold'
     ctx.lineWidth = 3
     if (state.selectedCell) {
-      const x = state.selectedCell.column * state.gridSize
-      const y = state.selectedCell.row * state.gridSize
+      const x = (state.selectedCell.column + state.boardOffset.x) * state.gridSize
+      const y = (state.selectedCell.row + state.boardOffset.y) * state.gridSize
       ctx.strokeRect(x, y, state.gridSize, state.gridSize)
     }
   }
@@ -76,8 +81,8 @@ export function BoardCanvas({ gameStateService }: BoardCanvasProps) {
       const rect = canvas.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-      const column = Math.floor(x / gameStateService.state.gridSize)
-      const row = Math.floor(y / gameStateService.state.gridSize)
+      const column = Math.floor(x / gameStateService.state.gridSize - gameStateService.state.boardOffset.x)
+      const row = Math.floor(y / gameStateService.state.gridSize - gameStateService.state.boardOffset.y)
       gameStateService.setSelectedCell(column, row)
     }
 

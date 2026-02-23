@@ -21,7 +21,7 @@ export function AnimationsCanvas({ gameStateService }: AnimationsCanvasProps) {
     // simple animation: moving translucent circles
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    Array.from(state.nodes.values()).filter(node => node instanceof Belt).forEach(belt => belt.drawValue(ctx, state.gridSize))
+    Array.from(state.nodes.values()).filter(node => node instanceof Belt).forEach(belt => belt.drawValue(ctx, state))
   }
 
   useEffect(() => {

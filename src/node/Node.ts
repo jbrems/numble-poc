@@ -1,3 +1,4 @@
+import type { GameState } from "../GameStateService"
 import type { Connection } from "../types"
 
 export abstract class Node {
@@ -16,9 +17,16 @@ export abstract class Node {
     this.connections = connections
   }
 
+  public drawNode(ctx: CanvasRenderingContext2D, gridSize: number, boardOffset: { x: number, y: number }) {
+    const translate: [number, number] = [boardOffset.x * gridSize, boardOffset.y * gridSize]
+    ctx.translate(...translate)
+    this.draw(ctx, gridSize)
+    ctx.translate(-translate[0], - translate[1])
+  }
+
   public abstract draw(ctx: CanvasRenderingContext2D, gridSize: number): void
 
-  public drawValue(_ctx: CanvasRenderingContext2D, _gridSize: number): void { }
+  public drawValue(_ctx: CanvasRenderingContext2D, _state: GameState): void { }
 
   public animate(_delta: number) { }
 

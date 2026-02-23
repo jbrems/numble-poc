@@ -10,16 +10,18 @@ const TICK_SPEED = 750
 
 export type GameState = {
   gridSize: number
+  boardOffset: { x: number, y: number }
   selectedCell: { row: number; column: number } | null
   nodes: Map<string, Node>
 }
 
-type StateChange = 'gridSize' | 'selectedCell' | 'nodes' | 'animation'
+type StateChange = 'gridSize' | 'selectedCell' | 'nodes' | 'animation' | 'offset'
 
 type StateChangeCallback = (state: GameState, change: StateChange) => void
 
 export class GameStateService {
   private gridSize: number
+  private boardOffset: { x: number, y: number }
   private selectedCell: { row: number; column: number } | null
   private nodes: Map<string, Node>
   private subscribers: Set<StateChangeCallback>
@@ -30,6 +32,7 @@ export class GameStateService {
 
   constructor() {
     this.gridSize = 50
+    this.boardOffset = { x: 0, y: 0 }
     this.selectedCell = null
     this.nodes = new Map([
       ['1:1', new Source(1, 1, 2)],
@@ -81,6 +84,13 @@ export class GameStateService {
     }
   }
 
+  setBoardOffset(x: number, y: number) {
+    if (this.boardOffset.x != x && this.boardOffset.y !== y) {
+      this.boardOffset = { x, y }
+      this.notifySubscribers('offset')
+    }
+  }
+
   setSelectedCell(column: number | null, row: number | null): void {
     if (column === null || row === null) this.selectedCell = null
     else this.selectedCell = { column, row }
@@ -105,9 +115,10 @@ export class GameStateService {
     this.notifySubscribers('nodes')
   }
 
-  get state() {
+  get state(): GameState {
     return {
       gridSize: this.gridSize,
+      boardOffset: this.boardOffset,
       selectedCell: this.selectedCell,
       nodes: this.nodes,
     }

@@ -53,7 +53,7 @@ export function Controls({ gameStateService }: { gameStateService: GameStateServ
   }, [state, gameStateService])
 
   if (!state.selectedCell) return null
-  return <div className="absolute top-[var(--top)] left-[var(--left)]" style={{ '--top': `${state.selectedCell.row * gameStateService.state.gridSize}px`, '--left': `${state.selectedCell.column * gameStateService.state.gridSize}px`, '--gridSize': `${gameStateService.state.gridSize}px` } as React.CSSProperties}>
+  return <div className="absolute top-[var(--top)] left-[var(--left)]" style={{ '--top': `${(state.selectedCell.row + state.boardOffset.y) * gameStateService.state.gridSize}px`, '--left': `${(state.selectedCell.column + state.boardOffset.x) * gameStateService.state.gridSize}px`, '--gridSize': `${gameStateService.state.gridSize}px` } as React.CSSProperties}>
     <button type="button" onClick={() => tryAddBelt(1, 0)} className="absolute border border-gray-300 rounded-[4px] cursor-pointer w-[30px] h-[30px] translate-x-[calc(var(--gridSize)+5px)] translate-y-[calc(var(--gridSize)*0.5-15px)]">→</button>
     <button type="button" onClick={() => tryAddBelt(0, 1)} className="absolute border border-gray-300 rounded-[4px] cursor-pointer w-[30px] h-[30px] translate-x-[calc(var(--gridSize)*0.5-15px)] translate-y-[calc(var(--gridSize)+5px)]">↓</button>
     <button type="button" onClick={() => tryAddBelt(-1, 0)} className="absolute border border-gray-300 rounded-[4px] cursor-pointer w-[30px] h-[30px] -translate-x-[35px] translate-y-[calc(var(--gridSize)*0.5-15px)]">←</button>

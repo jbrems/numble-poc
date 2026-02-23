@@ -1,3 +1,4 @@
+import type { GameState } from "../GameStateService"
 import type { Connection } from "../types"
 import { Node } from "./Node"
 
@@ -58,15 +59,15 @@ export class Belt extends Node {
     }
   }
 
-  drawValue(ctx: CanvasRenderingContext2D, gridSize: number): void {
+  drawValue(ctx: CanvasRenderingContext2D, state: GameState): void {
     if (this.value !== null) {
       const inputDirection = this.connections.find(c => c.type === 'input')?.direction || 'none'
       const outputDirection = this.connections.find(c => c.type === 'output')?.direction || 'none'
       const inputProgress = { left: { x: -1, y: 0 }, top: { x: 0, y: -1 }, right: { x: 1, y: 0 }, bottom: { x: 0, y: 1 }, none: { x: 0, y: 0 } }[inputDirection]
       const outputProgress = { left: { x: -1, y: 0 }, top: { x: 0, y: -1 }, right: { x: 1, y: 0 }, bottom: { x: 0, y: 1 }, none: { x: 0, y: 0 } }[outputDirection]
 
-      const packetX = this.column * gridSize + gridSize / 2 + (gridSize * (Math.max(0.5 - this.progress, 0)) * inputProgress.x) + (gridSize * (Math.max(this.progress - 0.5, 0)) * outputProgress.x)
-      const packetY = this.row * gridSize + gridSize / 2 + (gridSize * (Math.max(0.5 - this.progress, 0)) * inputProgress.y) + (gridSize * (Math.max(this.progress - 0.5, 0)) * outputProgress.y)
+      const packetX = (this.column + state.boardOffset.x) * state.gridSize + state.gridSize / 2 + (state.gridSize * (Math.max(0.5 - this.progress, 0)) * inputProgress.x) + (state.gridSize * (Math.max(this.progress - 0.5, 0)) * outputProgress.x)
+      const packetY = (this.row + state.boardOffset.y) * state.gridSize + state.gridSize / 2 + (state.gridSize * (Math.max(0.5 - this.progress, 0)) * inputProgress.y) + (state.gridSize * (Math.max(this.progress - 0.5, 0)) * outputProgress.y)
 
       ctx.fillStyle = this.getInputColor()
       ctx.beginPath()
